@@ -17,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::group(['middleware' => ['json.response']], function () {
+    Route::get('/contact', 'ContactController@index');
+    Route::get('/contact/{id}', 'ContactController@read');
+    Route::post('/contact', 'ContactController@store');
+    Route::patch('/contact', 'ContactController@update');
+    Route::delete('/contact/{id}', 'ContactController@delete');
+});
