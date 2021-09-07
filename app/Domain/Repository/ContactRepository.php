@@ -24,15 +24,17 @@
         {
             return ContactModel::create($contact);
         }
-
-        /**
-         * @param int $id
-         * @param array $contact
-         * @return ContactModel
-         */
+  
+      /**
+       * @param int $id
+       * @param array $contact
+       * @return ContactModel
+       * @throws \Throwable
+       */
         public function update(int $id, array $contact): ContactModel
         {
-            return ContactModel::firstOrFail($id)->update($contact);
+            $updated = ContactModel::findOrFail($id)->updateOrFail($contact);
+            return $this->getById($id);
         }
 
         /**
@@ -41,7 +43,7 @@
          */
         public function getById(int $id): ContactModel
         {
-            return ContactModel::firstOrFail($id);
+            return ContactModel::findOrFail($id);
         }
 
         /**
@@ -50,6 +52,6 @@
          */
         public function delete(int $id): bool
         {
-            return ContactModel::delete($id);
+            return ContactModel::findOrFail($id)->delete();
         }
     }
