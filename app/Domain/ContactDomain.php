@@ -8,7 +8,7 @@
     class ContactDomain
     {
         private ContactRepositoryInterface $contactRepository;
-    
+
         /**
          * @param ContactRepositoryInterface $contactRepository
          */
@@ -17,7 +17,7 @@
         ){
             $this->contactRepository = $contactRepository;
         }
-    
+
         /**
          * @return \Illuminate\Support\Collection
          */
@@ -30,7 +30,7 @@
         {
             return $this->contactRepository->create($contact);
         }
-    
+
         /**
          * @param int $id
          * @param array $contact
@@ -40,7 +40,7 @@
         {
             return $this->contactRepository->update($id, $contact);
         }
-    
+
         /**
          * @param int $id
          * @return ContactModel
@@ -49,7 +49,7 @@
         {
             return $this->contactRepository->getById($id);
         }
-    
+
         /**
          * @param int $id
          * @return bool
