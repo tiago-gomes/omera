@@ -29,7 +29,7 @@ class ContactController
   /**
    * @return JsonResponse
    */
-  public function index()
+  public function index(): JsonResponse
   {
     return $this->response($this->contactDomain->list()->toArray());
   }
@@ -40,7 +40,7 @@ class ContactController
    */
   public function store(CreateContact $request): JsonResponse
   {
-    $contact = $this->contactDomain->create($request->toArray());
+    $contact = $this->contactDomain->create($request->validated());
     return $this->response($contact->toArray());
   }
   
@@ -51,7 +51,7 @@ class ContactController
    */
   public function update(int $id, UpdateContact $request): JsonResponse
   {
-    $contact = $this->contactDomain->update($id, $request->toArray());
+    $contact = $this->contactDomain->update($id, $request->validated());
     return $this->response($contact->toArray());
   }
   
