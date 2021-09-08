@@ -5,7 +5,7 @@ use Spatie\DataTransferObject\DataTransferObject;
 
 class ApiDto extends DataTransferObject
 {
-  /** @var string|null $id */
+  /** @var string|null $salesforce_external_id */
   public ?string $salesforce_external_id;
   
   /** @var string|null $first_name */
