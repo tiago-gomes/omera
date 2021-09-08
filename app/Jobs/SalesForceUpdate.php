@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Services\SalesForceApi;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -32,7 +33,7 @@ class SalesForceUpdate implements ShouldQueue
    * @return array|mixed
    * @throws \Exception
    */
-    public function handle()
+    public function handle(): mixed
     {
       try {
         $client = app()->get(SalesForceApi::class);
@@ -41,6 +42,7 @@ class SalesForceUpdate implements ShouldQueue
         return true;
       } catch(\Exception $e) {
         throw new \Exception($e->getMessage(), $e->getCode());
+      } catch (GuzzleException $e) {
       }
     }
 }
