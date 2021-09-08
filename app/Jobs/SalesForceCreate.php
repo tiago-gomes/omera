@@ -38,15 +38,7 @@ class SalesForceCreate implements ShouldQueue
       $contactRepository = app()->get(ContactRepositoryInterface::class);
       $client->authenticate();
       $response = $client->create($this->payload);
-      
-      $this->payload = array_merge(
-        $this->payload,
-        [
-          'salesforce_external_id' => \Arr::get($response, 'id'),
-          'created_at' => now(),
-          'updated_at' => now()
-        ]
-      );
+      $this->payload = $this->mergeSalesForceExternalI($this->payload, $response);
       $contactRepository->upsert(
         $this->payload,
         [
@@ -61,5 +53,22 @@ class SalesForceCreate implements ShouldQueue
     } catch (GuzzleException $e) {
       throw new \Exception($e->getMessage(), $e->getCode());
     }
+  }
+  
+  /**
+   * @param array $payload
+   * @param array $response
+   * @return array|array[]|\ArrayAccess[]|\Illuminate\Support\Carbon[]
+   */
+  public function mergeSalesForceExternalI(array $payload, array $response): array
+  {
+    return array_merge(
+      $payload,
+      [
+        'salesforce_external_id' => \Arr::get($response, 'id'),
+        'created_at' => now(),
+        'updated_at' => now()
+      ]
+    );
   }
 }
