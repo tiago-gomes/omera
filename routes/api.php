@@ -20,9 +20,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => ['json.response']], function () {
-    Route::get('/contact', 'App\Http\Controllers\ContactController@index');
-    Route::get('/contact/{id}', 'App\Http\Controllers\ContactController@read');
-    Route::post('/contact', 'App\Http\Controllers\ContactController@store');
-    Route::patch('/contact/{id}', 'App\Http\Controllers\ContactController@update');
-    Route::delete('/contact/{id}', 'App\Http\Controllers\ContactController@delete');
+  Route::get('/contact/sync', 'App\Http\Controllers\ContactController@sync');
+  Route::get('/contact', 'App\Http\Controllers\ContactController@index');
+  Route::get('/contact/{id}', 'App\Http\Controllers\ContactController@read');
+  Route::post('/contact', 'App\Http\Controllers\ContactController@store');
+  Route::patch('/contact/{id}', 'App\Http\Controllers\ContactController@update');
+  Route::delete('/contact/{id}', 'App\Http\Controllers\ContactController@delete');
 });

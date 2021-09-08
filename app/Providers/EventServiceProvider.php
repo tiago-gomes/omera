@@ -4,9 +4,11 @@
   
   use App\Events\SalesForceCreateEvent;
   use App\Events\SalesForceDeleteEvent;
+  use App\Events\SalesForceSyncEvent;
   use App\Events\SalesForceUpdateEvent;
   use App\Listeners\SalesForceCreateListener;
   use App\Listeners\SalesForceDeleteListener;
+  use App\Listeners\SalesForceSyncListener;
   use App\Listeners\SalesForceUpdateListener;
   use Illuminate\Auth\Events\Registered;
   use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -30,6 +32,9 @@
       SalesForceDeleteEvent::class => [
         SalesForceDeleteListener::class
       ],
+      SalesForceSyncEvent::class => [
+        SalesForceSyncListener::class
+      ]
     ];
     
     /**

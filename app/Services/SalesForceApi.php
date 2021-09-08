@@ -65,8 +65,7 @@
   
   
     /**
-     * @return mixed
-     * @throws \Exception
+     * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getAllContacts(): array
@@ -74,7 +73,12 @@
       $response = $this->client
         ->request(
           'GET',
-          '/contacts/'
+          '/contacts/',
+          [
+            'headers' => [
+              'authorization' => $this->token
+            ]
+          ]
         );
       
       return $this->response($response);
@@ -91,7 +95,12 @@
       $response = $this->client
         ->request(
           'GET',
-          '/contacts/' . $id
+          '/contacts/' . $id,
+          [
+            'headers' => [
+              'authorization' => $this->token
+            ]
+          ]
         );
       
       return $this->response($response);

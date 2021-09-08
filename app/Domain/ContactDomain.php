@@ -5,6 +5,7 @@ namespace App\Domain;
 use App\Domain\Repository\Contract\ContactRepositoryInterface;
 use App\Events\SalesForceCreateEvent;
 use App\Events\SalesForceDeleteEvent;
+use App\Events\SalesForceSyncEvent;
 use App\Events\SalesForceUpdateEvent;
 use App\Models\Contact as ContactModel;
 
@@ -73,8 +74,13 @@ class ContactDomain
     return $this->contactRepository->delete($id);
   }
   
+  /**
+   * @return bool
+   */
   public function sync()
+    : bool
   {
-    return [];
+    SalesForceSyncEvent::dispatch();
+    return true;
   }
 }
