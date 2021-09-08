@@ -15,11 +15,11 @@ class CreateContact extends FormRequest
     public function rules()
     {
         return [
-            'firstName' => 'sometimes|string',
+            'first_name' => 'sometimes|string',
+            'last_name' => 'sometimes|string',
             'email' => 'sometimes|email|unique:mysql.contact',
             'phone' => 'sometimes|string',
-            'leadSource' => 'sometimes|string',
-            'salesforce_external_id' => 'sometimes|string'
+            'lead_source' => 'sometimes|string'
         ];
     }
 }
