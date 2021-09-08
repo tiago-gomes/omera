@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: User
+ * User: Tiago Gomes
  * Date: 07/09/2021
  * Time: 14:22
  */
@@ -12,7 +12,6 @@ use App\Domain\ContactDomain;
 use App\Http\Requests\CreateContact;
 use App\Http\Requests\UpdateContact;
 use Illuminate\Http\JsonResponse;
-use \Illuminate\Support\Facades\Request;
 use Symfony\Component\HttpFoundation\Response as ExceptionCode;
 
 class ContactController
