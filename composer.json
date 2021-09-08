@@ -5,12 +5,14 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "ext-json": "*",
         "php": "^8.0",
+        "ext-json": "*",
+        "bensampo/laravel-enum": "^3.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.54",
         "laravel/sanctum": "^2.11",
+        "laravel/telescope": "^4.6",
         "laravel/tinker": "^2.5"
     },
     "require-dev": {
