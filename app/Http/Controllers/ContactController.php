@@ -38,7 +38,7 @@ class ContactController
    * @param CreateContact $request
    * @return JsonResponse
    */
-  public function store(CreateContact $request)
+  public function store(CreateContact $request): JsonResponse
   {
     $contact = $this->contactDomain->create($request->toArray());
     return $this->response($contact->toArray());
@@ -49,7 +49,7 @@ class ContactController
    * @param UpdateContact $request
    * @return JsonResponse
    */
-  public function update(int $id, UpdateContact $request)
+  public function update(int $id, UpdateContact $request): JsonResponse
   {
     $contact = $this->contactDomain->update($id, $request->toArray());
     return $this->response($contact->toArray());
@@ -59,7 +59,7 @@ class ContactController
    * @param int $id
    * @return JsonResponse
    */
-  public function read(int $id)
+  public function read(int $id): JsonResponse
   {
     $contact = $this->contactDomain->getById($id);
     return $this->response($contact->toArray());
@@ -70,7 +70,7 @@ class ContactController
    * @return JsonResponse
    * @throws \Exception
    */
-  public function delete(int $id)
+  public function delete(int $id): JsonResponse
   {
     $contactDeleted = $this->contactDomain->delete($id);
     if (!$contactDeleted) {
@@ -82,7 +82,7 @@ class ContactController
   /**
    * @return JsonResponse
    */
-  public function sync()
+  public function sync(): JsonResponse
   {
     $this->contactDomain->sync();
     return $this->response(['ok']);
@@ -98,6 +98,6 @@ class ContactController
   {
     return response()->json([
       'data' => $response
-    ], 200);
+    ], ExceptionCode::HTTP_OK);
   }
 }
