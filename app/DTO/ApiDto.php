@@ -28,7 +28,7 @@ class ApiDto extends DataTransferObject
    * @return static
    * @throws \Spatie\DataTransferObject\Exceptions\UnknownProperties
    */
-  public static function fromSalesForce(SalesForceDto $salesForceDto)
+  public static function fromSalesForce(SalesForceDto $salesForceDto): static
   {
     return new static(
       array_merge(
