@@ -67,6 +67,7 @@
     /**
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Exception
      */
     public function getAllContacts(): array
     {
