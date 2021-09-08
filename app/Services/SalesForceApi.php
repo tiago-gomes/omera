@@ -8,9 +8,10 @@
   
   namespace App\Services;
   
+  use GuzzleHttp\Client;
   use Illuminate\Http\Client\Response;
-  use Illuminate\Support\Facades\Http;
   use Illuminate\Support\Arr;
+  use Psr\Http\Message\ResponseInterface;
   use Symfony\Component\HttpFoundation\Response as ExceptionCode;
   
   /**
@@ -19,30 +20,37 @@
    */
   class SalesForceApi
   {
-    public static $domain = "https://force-bridge-stagining-7lcyopg5cq-ue.a.run.app/";
+    public static $domain = "https://force-bridge-stagining-7lcyopg5cq-ue.a.run.app";
     
     private $token;
+    private Client $client;
     
     public function __construct()
     {
-      $this->client = Http::acceptJson();
+      $this->client = new Client(['base_uri' => self::$domain]);
     }
-  
+    
     /**
      * @return bool
      * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function authenticate(): bool
     {
-      $url = self::$domain . '/login/';
       $response = $this->client
-        ->post($url, config('salesforce.credentials'));
+        ->request(
+          'POST',
+          '/login/',
+          [
+            'form_params' => config('salesforce')
+          ]
+        );
       
-      if ($response->status() != ExceptionCode::HTTP_ACCEPTED) {
-        throw new \Exception('Invalid credentials', ExceptionCode::HTTP_PRECONDITION_FAILED);
+      if ($response->getStatusCode() != ExceptionCode::HTTP_OK) {
+        throw new \Exception('Login Failed', ExceptionCode::HTTP_PRECONDITION_FAILED);
       }
       
-      $this->setToken($response->body());
+      $this->setToken($response->getBody()->getContents());
       return true;
     }
     
@@ -54,64 +62,60 @@
       $data = json_decode($content, true);
       $this->token = Arr::get($data, 'token');
     }
-    
-    
+  
+  
     /**
      * @return mixed
      * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getAllContacts(): array
     {
-      $url = self::$domain . '/contacts/';
       $response = $this->client
-        ->withHeaders(
-          [
-            'Autorization' => $this->token
-          ]
-        )
-        ->get($url, [
-          "authorization" => $this->token
-        ]);
+        ->request(
+          'GET',
+          '/contacts/'
+        );
       
       return $this->response($response);
     }
-    
+  
     /**
      * @param int $id
      * @return mixed
      * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getContactById(int $id): array
     {
-      $url = self::$domain . '/contacts/' . $id;
       $response = $this->client
-        ->withHeaders(
-          [
-            'Autorization' => $this->token
-          ]
-        )
-        ->get($url, [
-          "authorization" => $this->token
-        ]);
+        ->request(
+          'GET',
+          '/contacts/' . $id
+        );
       
       return $this->response($response);
     }
     
     /**
      * @param array $contact
-     * @return mixed
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Exception
      */
     public function create(array $contact): array
     {
-      $url = self::$domain . '/contacts/';
       $response = $this->client
-        ->withHeaders(
+        ->request(
+          'POST',
+          '/contacts/',
           [
-            'Autorization' => $this->token
+            'form_params' => $contact,
+            'headers' => [
+              'authorization' => $this->token
+            ]
           ]
-        )
-        ->post($url, $contact);
+        );
       
       return $this->response($response);
     }
@@ -119,52 +123,60 @@
     /**
      * @param int $id
      * @param array $contact
-     * @return mixed
-     */
-    public function update(int $id, array $contact): array
-    {
-      $url = self::$domain . '/contacts/' . $id;
-      $response = $this->client
-        ->withHeaders(
-          [
-            'Autorization' => $this->token
-          ]
-        )
-        ->patch($url, $contact);
-      
-      return $response->getBody()->getContents();
-    }
-    
-    /**
-     * @param int $id
      * @return array
      * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function delete(int $id): array
+    public function update(string $id, array $contact): array
     {
-      $url = self::$domain . '/contacts/' . $id;
       $response = $this->client
-        ->withHeaders(
+        ->request(
+          'PATCH',
+          '/contacts/' . $id,
           [
-            'Autorization' => $this->token
+            'form_params' => $contact,
+            'headers' => [
+              'authorization' => $this->token
+            ]
           ]
-        )
-        ->delete($url);
+        );
+      
+      return $this->response($response);
+    }
+  
+    /**
+     * @param string $id
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Exception
+     */
+    public function delete(string $id): array
+    {
+      $response = $this->client
+        ->request(
+          'DELETE',
+          '/contacts/' . $id,
+          [
+            'headers' => [
+              'authorization' => $this->token
+            ]
+          ]
+        );
       
       return $this->response($response);
     }
     
     /**
-     * @param Response $response
+     * @param ResponseInterface $response
      * @return array
      * @throws \Exception
      */
-    private function response(Response $response): array
+    private function response(ResponseInterface $response): array
     {
-      if (!$response->ok()) {
-        throw new \Exception($response->body(), 400);
+      if ($response->getStatusCode() != 200) {
+        throw new \Exception($response->getBody()->getContents(), 400);
       }
       
-      return json_decode($response->body(), true);
+      return json_decode($response->getBody()->getContents(), true);
     }
   }
