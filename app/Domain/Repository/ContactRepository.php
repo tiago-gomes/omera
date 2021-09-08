@@ -33,7 +33,7 @@ class ContactRepository implements ContactRepositoryInterface
    */
     public function update(int $id, array $contact): ContactModel
     {
-        $updated = ContactModel::findOrFail($id)->updateOrFail($contact);
+        ContactModel::findOrFail($id)->updateOrFail($contact);
         return $this->getById($id);
     }
 
