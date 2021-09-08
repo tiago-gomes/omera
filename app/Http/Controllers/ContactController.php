@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Response as ExceptionCode;
 
 class ContactController
 {
+  private ContactDomain $contactDomain;
+  
   /**
    * @param ContactDomain $contactDomain
    */
