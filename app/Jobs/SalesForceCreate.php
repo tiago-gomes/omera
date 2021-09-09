@@ -35,10 +35,12 @@ class SalesForceCreate implements ShouldQueue
   {
     try {
       $client = app()->get(SalesForceApi::class);
-      $contactRepository = app()->get(ContactRepositoryInterface::class);
       $client->authenticate();
       $response = $client->create($this->payload);
-      $this->payload = $this->mergeSalesForceExternalI($this->payload, $response);
+      
+      $contactRepository = app()->get(ContactRepositoryInterface::class);
+      $this->mergeSalesForceExternalIdIntoPayload($this->payload, $response);
+      
       $contactRepository->upsert(
         $this->payload,
         [
@@ -58,11 +60,10 @@ class SalesForceCreate implements ShouldQueue
   /**
    * @param array $payload
    * @param array $response
-   * @return array|array[]|\ArrayAccess[]|\Illuminate\Support\Carbon[]
    */
-  public function mergeSalesForceExternalI(array $payload, array $response): array
+  public function mergeSalesForceExternalIdIntoPayload(array $payload, array $response)
   {
-    return array_merge(
+    $this->payload = array_merge(
       $payload,
       [
         'salesforce_external_id' => \Arr::get($response, 'id'),
