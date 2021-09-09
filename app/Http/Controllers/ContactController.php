@@ -12,7 +12,7 @@ use App\Domain\ContactDomain;
 use App\Http\Requests\CreateContact;
 use App\Http\Requests\UpdateContact;
 use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpFoundation\Response as ExceptionCode;
+use Symfony\Component\HttpFoundation\Response as HttpCode;
 
 class ContactController
 {
@@ -76,7 +76,7 @@ class ContactController
   {
     $contactDeleted = $this->contactDomain->delete($id);
     if (!$contactDeleted) {
-      throw new \Exception('Entity not deleted', ExceptionCode::HTTP_UNPROCESSABLE_ENTITY);
+      throw new \Exception('Entity not deleted', HttpCode::HTTP_UNPROCESSABLE_ENTITY);
     }
     return $this->response(['ok']);
   }
@@ -100,6 +100,6 @@ class ContactController
   {
     return response()->json([
       'data' => $response
-    ], ExceptionCode::HTTP_OK);
+    ], HttpCode::HTTP_OK);
   }
 }

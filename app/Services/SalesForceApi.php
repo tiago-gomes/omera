@@ -12,7 +12,7 @@
   use Illuminate\Http\Client\Response;
   use Illuminate\Support\Arr;
   use Psr\Http\Message\ResponseInterface;
-  use Symfony\Component\HttpFoundation\Response as ExceptionCode;
+  use Symfony\Component\HttpFoundation\Response as HttpCode;
   
   /**
    * Class SalesForceApi
@@ -46,8 +46,8 @@
           ]
         );
       
-      if ($response->getStatusCode() != ExceptionCode::HTTP_OK) {
-        throw new \Exception('Login Failed', ExceptionCode::HTTP_PRECONDITION_FAILED);
+      if ($response->getStatusCode() != HttpCode::HTTP_OK) {
+        throw new \Exception('Login Failed', HttpCode::HTTP_PRECONDITION_FAILED);
       }
       
       $this->setToken($response->getBody()->getContents());
@@ -184,7 +184,7 @@
     private function response(ResponseInterface $response): array
     {
       if ($response->getStatusCode() != 200) {
-        throw new \Exception($response->getBody()->getContents(), ExceptionCode::HTTP_NOT_ACCEPTABLE);
+        throw new \Exception($response->getBody()->getContents(), HttpCode::HTTP_NOT_ACCEPTABLE);
       }
       
       return json_decode($response->getBody()->getContents(), true);
