@@ -184,7 +184,7 @@
     private function response(ResponseInterface $response): array
     {
       if ($response->getStatusCode() != 200) {
-        throw new \Exception($response->getBody()->getContents(), 400);
+        throw new \Exception($response->getBody()->getContents(), ExceptionCode::HTTP_NOT_ACCEPTABLE);
       }
       
       return json_decode($response->getBody()->getContents(), true);
