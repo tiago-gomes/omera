@@ -15,7 +15,7 @@ class SalesForceDeleteEvent
   public string $id;
   
   /**
-   * @param int $id
+   * @param string $id
    */
   public function __construct(
     string $id
